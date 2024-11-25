@@ -1,0 +1,419 @@
+Step 1: Install Docker on Ubuntu
+
+sudo apt update
+sudo apt install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+
+sudo apt-get update
+sudo apt-get install -y docker-buildx-plugin
+
+sudo usermod -aG docker $USER
+newgrp docker
+
+docker ps
+
+
+
+Step 2: Create a Dockerfile:
+
+1.Navigate to your project directory:
+
+cd ~/personal-cloud
+
+Create a Dockerfile:
+
+nano Dockerfile
+
+Copy the Content In the provided Dockerfile
+
+
+Step 3: Create a .dockerignore File
+1.Create the .dockerignore file:
+
+nano .dockerignore
+
+__pycache__
+*.pyc
+*.pyo
+*.db
+secret.key
+venv/
+
+
+
+
+Based on the detailed setup you’ve already performed, containerizing this project will involve adapting the current configuration into a Docker containerized environment. Here’s how to proceed step by step:
+
+Step 1: Install Docker on Ubuntu
+Ensure Docker is installed and running on your Ubuntu server. If not, install it:
+
+bash
+Copy code
+sudo apt update
+sudo apt install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+Verify installation:
+
+bash
+Copy code
+docker --version
+Step 2: Create a Dockerfile
+The Dockerfile defines how to build your application's Docker image.
+
+Navigate to your project directory:
+
+bash
+Copy code
+cd ~/personal-cloud
+Create a Dockerfile:
+
+bash
+Copy code
+nano Dockerfile
+Add the following content to the Dockerfile:
+
+dockerfile
+Copy code
+# Use an official Python runtime as the base image
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy project files into the container
+COPY . /app
+
+# Install Python dependencies
+RUN pip install --no-cache-dir Flask cryptography gunicorn
+
+# Expose port 5000 for Flask
+EXPOSE 5000
+
+# Copy the Nginx configuration for reverse proxy (if applicable)
+COPY ./nginx/personal-cloud /etc/nginx/sites-available/personal-cloud
+
+# Set default command to run the Flask app
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+Step 3: Create a .dockerignore File
+Prevent unnecessary files from being added to the Docker image.
+
+Create the .dockerignore file:
+
+bash
+Copy code
+nano .dockerignore
+Add the following:
+
+markdown
+Copy code
+__pycache__
+*.pyc
+*.pyo
+*.db
+secret.key
+venv/
+
+
+Step 4: Build the Docker Image:
+
+1.Build the Docker image for your application:
+docker build -t personal-cloud-storage .
+docker images
+
+
+Step 5: Create Docker Volumes:
+docker volume create personal-cloud-storage
+
+
+Based on the detailed setup you’ve already performed, containerizing this project will involve adapting the current configuration into a Docker containerized environment. Here’s how to proceed step by step:
+
+Step 1: Install Docker on Ubuntu
+Ensure Docker is installed and running on your Ubuntu server. If not, install it:
+
+bash
+Copy code
+sudo apt update
+sudo apt install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+Verify installation:
+
+bash
+Copy code
+docker --version
+Step 2: Create a Dockerfile
+The Dockerfile defines how to build your application's Docker image.
+
+Navigate to your project directory:
+
+bash
+Copy code
+cd ~/personal-cloud
+Create a Dockerfile:
+
+bash
+Copy code
+nano Dockerfile
+Add the following content to the Dockerfile:
+
+dockerfile
+Copy code
+# Use an official Python runtime as the base image
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy project files into the container
+COPY . /app
+
+# Install Python dependencies
+RUN pip install --no-cache-dir Flask cryptography gunicorn
+
+# Expose port 5000 for Flask
+EXPOSE 5000
+
+# Copy the Nginx configuration for reverse proxy (if applicable)
+COPY ./nginx/personal-cloud /etc/nginx/sites-available/personal-cloud
+
+# Set default command to run the Flask app
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+Step 3: Create a .dockerignore File
+Prevent unnecessary files from being added to the Docker image.
+
+Create the .dockerignore file:
+
+bash
+Copy code
+nano .dockerignore
+Add the following:
+
+markdown
+Copy code
+__pycache__
+*.pyc
+*.pyo
+*.db
+secret.key
+venv/
+Step 4: Build the Docker Image
+Build the Docker image for your application:
+
+bash
+Copy code
+docker build -t personal-cloud-storage .
+Verify the image is built:
+
+bash
+Copy code
+docker images
+Step 5: Create Docker Volumes
+To persist data (e.g., files stored in /var/www/personal-cloud/storage), use Docker volumes.
+
+Create a volume for your app storage:
+bash
+Copy code
+docker volume create personal-cloud-storage
+
+
+Step 6: Run the Container
+docker run -d -p 80:5000 \
+  -v personal-cloud-storage:/var/www/personal-cloud/storage \
+  --name personal-cloud-container personal-cloud-storage
+
+
+docker ps
+
+
+Step 7: Secure with SSL:
+
+sudo apt install certbot python3-certbot-nginx -y
+
+docker run -d -p 80:80 -p 443:443 \
+  -v /etc/letsencrypt:/etc/letsencrypt \
+  -v /var/lib/letsencrypt:/var/lib/letsencrypt \
+  -v personal-cloud-storage:/var/www/personal-cloud/storage \
+  --name personal-cloud-container personal-cloud-storage
+
+
+sudo certbot certonly --nginx -d your-domain.com -d www.your-domain.com
+
+
+Step 8: Automate Start on Reboot:
+
+docker update --restart unless-stopped personal-cloud-container
+
+Step 9: Test Your Application
+docker stop personal-cloud-container
+docker start personal-cloud-container
+
+
+
+Based on the detailed setup you’ve already performed, containerizing this project will involve adapting the current configuration into a Docker containerized environment. Here’s how to proceed step by step:
+
+Step 1: Install Docker on Ubuntu
+Ensure Docker is installed and running on your Ubuntu server. If not, install it:
+
+bash
+Copy code
+sudo apt update
+sudo apt install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+Verify installation:
+
+bash
+Copy code
+docker --version
+Step 2: Create a Dockerfile
+The Dockerfile defines how to build your application's Docker image.
+
+Navigate to your project directory:
+
+bash
+Copy code
+cd ~/personal-cloud
+Create a Dockerfile:
+
+bash
+Copy code
+nano Dockerfile
+Add the following content to the Dockerfile:
+
+dockerfile
+Copy code
+# Use an official Python runtime as the base image
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy project files into the container
+COPY . /app
+
+# Install Python dependencies
+RUN pip install --no-cache-dir Flask cryptography gunicorn
+
+# Expose port 5000 for Flask
+EXPOSE 5000
+
+# Copy the Nginx configuration for reverse proxy (if applicable)
+COPY ./nginx/personal-cloud /etc/nginx/sites-available/personal-cloud
+
+# Set default command to run the Flask app
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+Step 3: Create a .dockerignore File
+Prevent unnecessary files from being added to the Docker image.
+
+Create the .dockerignore file:
+
+bash
+Copy code
+nano .dockerignore
+Add the following:
+
+markdown
+Copy code
+__pycache__
+*.pyc
+*.pyo
+*.db
+secret.key
+venv/
+Step 4: Build the Docker Image
+Build the Docker image for your application:
+
+bash
+Copy code
+docker build -t personal-cloud-storage .
+Verify the image is built:
+
+bash
+Copy code
+docker images
+Step 5: Create Docker Volumes
+To persist data (e.g., files stored in /var/www/personal-cloud/storage), use Docker volumes.
+
+Create a volume for your app storage:
+bash
+Copy code
+docker volume create personal-cloud-storage
+Step 6: Run the Container
+Run the container, mapping necessary ports and volumes:
+
+bash
+Copy code
+docker run -d -p 80:5000 \
+  -v personal-cloud-storage:/var/www/personal-cloud/storage \
+  --name personal-cloud-container personal-cloud-storage
+Confirm the container is running:
+
+bash
+Copy code
+docker ps
+Step 7: Secure with SSL (Optional)
+If you’ve used Certbot with Nginx, you’ll need to adapt it for Docker:
+
+Install Certbot on the host machine (if not already installed):
+
+bash
+Copy code
+sudo apt install certbot python3-certbot-nginx -y
+Configure Nginx inside the container:
+
+Ensure the Nginx configuration file is included in your Dockerfile (already copied in Step 2).
+Mount SSL certificates as volumes during container runtime:
+bash
+Copy code
+docker run -d -p 80:80 -p 443:443 \
+  -v /etc/letsencrypt:/etc/letsencrypt \
+  -v /var/lib/letsencrypt:/var/lib/letsencrypt \
+  -v personal-cloud-storage:/var/www/personal-cloud/storage \
+  --name personal-cloud-container personal-cloud-storage
+Use Certbot to generate the SSL certificate:
+
+bash
+Copy code
+sudo certbot certonly --nginx -d your-domain.com -d www.your-domain.com
+Step 8: Automate Start on Reboot
+To ensure the container starts on reboot:
+
+Update the container’s restart policy:
+bash
+Copy code
+docker update --restart unless-stopped personal-cloud-container
+
+
+Step 9: Test Your Application
+Access your application at http://<server-ip> or your domain.
+Upload and download files to ensure proper functionality.
+Verify data persistence by stopping and restarting the container:
+bash
+Copy code
+docker stop personal-cloud-container
+docker start personal-cloud-container
+
+
+Step 10: Debugging and Logs:
+
+docker rm -f personal-cloud-container
+docker build -t personal-cloud-storage .
+docker run -d -p 80:5000 personal-cloud-storage
+
+____________________________________________________________________________________________________
+
+ADDITIONAL COMMANDS
+
+sudo lsof -i :80
+Step 2: Stop the Conflicting Process
+Once you identify the process using port 80:
+
+If it's Nginx:
+sudo systemctl stop nginx
+
+docker rm -f personal-cloud-container
+
+docker logs personal-cloud-container
+
