@@ -3,145 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload and Download</title>
+    <title>My Cloud Storage</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <style>
-        /* Basic styling */
+        /* General Styling */
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: #1e1e2f;
+            color: #fff;
+            display: flex;
         }
 
-        /* Main container */
-        .container {
-            width: 80%;
-            margin: 50px auto;
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #252639;
+            padding-top: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding-left: 10px;
+        }
+
+        .sidebar h2 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 10px 0;
+            cursor: pointer;
+            color: #bbb;
+            font-size: 1.1rem;
+            transition: background 0.3s;
+        }
+
+        .sidebar ul li:hover {
+            background: #4CAF50;
+            color: #fff;
+        }
+
+        .sidebar ul li.active {
+            background: #00e676;
+        }
+
+        /* Main Container */
+        .main-content {
+            margin-left: 240px;
+            width: calc(100% - 240px);
             padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(145deg, #28293e, #1a1a28);
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
             text-align: center;
-            color: #007BFF;
-            font-weight: 700;
+            font-size: 2.5rem;
+            color: #4CAF50;
+            margin-bottom: 30px;
         }
 
-        /* Upload form */
+        /* Upload Form */
         .upload-form {
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
             margin-bottom: 30px;
         }
 
         .upload-form input[type="file"] {
             padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-right: 20px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            background-color: #28293e;
+            color: #fff;
+            cursor: pointer;
+            transition: border 0.3s;
+        }
+
+        .upload-form input[type="file"]:hover {
+            border: 2px solid #00e676;
         }
 
         .upload-form button {
-            padding: 12px 25px;
-            background-color: #007BFF;
+            padding: 12px 30px;
+            background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            border-radius: 8px;
             font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
 
         .upload-form button:hover {
-            background-color: #0056b3;
+            background-color: #00e676;
         }
 
-        /* File List Grid */
+        /* File List */
         .file-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
-            padding: 0;
             list-style: none;
+            padding: 0;
         }
 
         .file-list li {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(145deg, #252639, #1a1b29);
+            border-radius: 12px;
+            padding: 15px;
             text-align: center;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .file-list li:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
         }
 
         .file-list li i {
-            font-size: 50px;
-            color: #007BFF;
+            font-size: 60px;
+            color: #4CAF50;
             margin-bottom: 10px;
         }
 
         .file-list li p {
-            margin: 0;
-            font-size: 14px;
-            color: #555;
-            overflow: hidden;
+            font-size: 16px;
+            margin: 10px 0;
+            color: #bbb;
             text-overflow: ellipsis;
             white-space: nowrap;
+            overflow: hidden;
         }
 
         .file-list li a {
-            display: block;
+            display: inline-block;
             text-decoration: none;
-            background-color: #007BFF;
             color: white;
+            background-color: #4CAF50;
             padding: 8px 15px;
-            border-radius: 5px;
+            border-radius: 6px;
             font-size: 14px;
-            margin-top: 10px;
+            transition: background 0.3s;
         }
 
         .file-list li a:hover {
-            background-color: #0056b3;
+            background-color: #00e676;
         }
 
         /* Search Bar */
         .search-container {
-            margin-bottom: 30px;
             text-align: center;
+            margin-bottom: 30px;
         }
 
         .search-container input {
+            width: 60%;
             padding: 10px;
-            width: 50%;
             font-size: 16px;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            background-color: #28293e;
+            color: #fff;
             box-sizing: border-box;
-            margin-top: 10px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .search-container input:focus {
+            border: 2px solid #00e676;
         }
 
         /* Message */
         .message {
             text-align: center;
-            color: red;
+            font-size: 18px;
             font-weight: 500;
+            color: #ff5722;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>File Upload and Download</h1>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>File Formats</h2>
+        <ul id="file-formats">
+            <li onclick="filterFiles('pdf')" id="pdf" class="active">PDF</li>
+            <li onclick="filterFiles('docx')" id="docx">DOCX</li>
+            <li onclick="filterFiles('txt')" id="txt">TXT</li>
+            <li onclick="filterFiles('jpg')" id="jpg">JPG</li>
+            <li onclick="filterFiles('png')" id="png">PNG</li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Personal Cloud Storage</h1>
 
         <!-- Upload Form -->
         <div class="upload-form">
@@ -151,7 +226,7 @@
             </form>
         </div>
 
-        <!-- Success/Error Message -->
+        <!-- Message -->
         <div id="message" class="message"></div>
 
         <!-- Search Bar -->
@@ -162,7 +237,7 @@
         <!-- File List -->
         <ul id="file-list" class="file-list">
             {% for file in files %}
-                <li>
+                <li data-format="{{ file.split('.')[-1] }}">
                     <i class="fa fa-file"></i>
                     <p>{{ file }}</p>
                     <a href="/download/{{ file }}" target="_blank">Download</a>
@@ -172,7 +247,7 @@
     </div>
 
     <script>
-        // Handle file upload
+        // File upload handling
         document.getElementById('upload-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = new FormData(this);
@@ -188,7 +263,7 @@
                     messageDiv.style.color = 'green';
                     messageDiv.textContent = data.message;
 
-                    // Reload the list of files after successful upload
+                    // Refresh file list
                     fetch('/files')
                         .then(response => response.text())
                         .then(html => {
@@ -205,20 +280,38 @@
             });
         });
 
-        // Search files dynamically
+        // File search
         function searchFiles() {
             const searchTerm = document.getElementById('search').value.toLowerCase();
             const fileItems = document.querySelectorAll('#file-list li');
 
-            fileItems.forEach(function(item) {
+            fileItems.forEach(item => {
                 const fileName = item.querySelector('p').textContent.toLowerCase();
-                if (fileName.includes(searchTerm)) {
-                    item.style.display = '';
+                item.style.display = fileName.includes(searchTerm) ? 'block' : 'none';
+            });
+        }
+
+        // Filter files by format
+        function filterFiles(format) {
+            const fileItems = document.querySelectorAll('#file-list li');
+            const formatLinks = document.querySelectorAll('#file-formats li');
+            
+            formatLinks.forEach(link => link.classList.remove('active'));
+            document.getElementById(format).classList.add('active');
+
+            fileItems.forEach(item => {
+                if (item.getAttribute('data-format') === format || format === 'all') {
+                    item.style.display = 'block';
                 } else {
                     item.style.display = 'none';
                 }
             });
         }
+
+        // Initialize file list and filter
+        document.addEventListener('DOMContentLoaded', function() {
+            filterFiles('pdf');
+        });
     </script>
 
 </body>
