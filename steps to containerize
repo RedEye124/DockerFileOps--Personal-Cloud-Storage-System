@@ -231,7 +231,7 @@ Step 7: Secure with SSL:
 
 sudo apt install certbot python3-certbot-nginx -y
 
-docker run -d -p 80:80 -p 443:443 \
+docker run -d -p 5000:5000 \
   -v /etc/letsencrypt:/etc/letsencrypt \
   -v /var/lib/letsencrypt:/var/lib/letsencrypt \
   -v personal-cloud-storage:/var/www/personal-cloud/storage \
