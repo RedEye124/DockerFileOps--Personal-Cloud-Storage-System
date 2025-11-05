@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: DockerFileOps--Personal-Cloud-Storage-System
+  annotations:
+    github.com/project-slug: RedEye124/DockerFileOps--Personal-Cloud-Storage-System
+spec:
+  type: other
+  lifecycle: unknown
+  owner: test-group
